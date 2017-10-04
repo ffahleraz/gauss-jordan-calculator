@@ -21,11 +21,12 @@ public class Main {
 
         System.out.println("||============================SELAMAT DATANG DI GAUSS-JORDAN======================================||");
         System.out.println(">> Pilih menu  :");
-        System.out.println("1. Matriks augmented dengan input keyboard");
-        System.out.println("2. Matriks augmented dengan input file eksternal");
+        System.out.println("1. Matriks biasa");
+        System.out.println("2. Matriks Hilbert");
         System.out.println("3. Interpolasi");
         System.out.println("4. Exit");
         System.out.print(">>");
+
 
         String OptionMenu = scan.nextLine();
         switch (OptionMenu) {
@@ -38,10 +39,11 @@ public class Main {
                     System.out.print("\n");
                     System.out.println("||====================================AUGMENTED MATRIX============================================||");
                     System.out.println(">> Pilih menu  :");
-                    System.out.println("1. Input matriks");
-                    System.out.println("2. Tampilkan matriks eselon tereduksi");
-                    System.out.println("3. Tampilkan solusi matriks");
-                    System.out.println("4. Back");
+                    System.out.println("1. Input matriks dari keyboard");
+                    System.out.println("2. Input matriks dari file eksternal");
+                    System.out.println("3. Tampilkan solusi matriks ke layar");
+                    System.out.println("4. Tampilkan solusi matriks ke file eksternal");
+                    System.out.println("5. Back");
                     System.out.print(">>");
 
                     String OptionCase = scan.nextLine();
@@ -50,104 +52,119 @@ public class Main {
                             M1.read();
                             break;
 
-                        case "2" :
+          /*              case "2" :
                             M1.writeGaussJordan();
                             break;
-
+          */
                         case "3" :
+                            M1.writeGaussJordan();
                             M1.writeGaussJordanSolution();
                             break;
 
-                        case "4" :
+            /*            case "4" :
+                            M1.writeToFile(M1);
+                            break;
+            */
+                        case "5" :
                             EndCase = true;
                             break;
 
                         default :
                             System.out.println("\n||Input salah, masukan input ulang||\n");
                             break;
-                          }
                     }
-               break;
+                }
+                break;
 
-  /*          case 2 :
+            case "2" :
 
                 Matrix M2 = new Matrix();
                 EndCase = false;
                 while (!EndCase) {
 
+                    System.out.print("\n");
+                    System.out.println("||====================================AUGMENTED MATRIX============================================||");
                     System.out.println(">> Pilih menu  :");
-                    System.out.println("1. Input file eksternal");
-                    System.out.println("2. Tampilkan matriks eselon tereduksi");
-                    System.out.println("3. Tampilkan solusi matriks ke layar");
-                    System.out.println("4. Tampilkan solusi matriks ke file eksternal");
+                    System.out.println("1. Input matriks hilbert dari keyboard");
+                    System.out.println("2. Input matriks hilbert dari file eksternal");
+                    System.out.println("3. Tampilkan solusi matriks hilbert ke layar");
+                    System.out.println("4. Tampilkan solusi matriks hilbert ke file eksternal");
                     System.out.println("5. Back");
+                    System.out.print(">>");
 
-                    int OptionCase = scan.nextInt();
+                    String OptionCase = scan.nextLine();
                     switch (OptionCase) {
-                        case 1 :
-                            M2.read();
+                        case "1" :
+                            M2.readForHilbert();
                             break;
 
-                        case 2 :
-                            M.Matrix(M);
-                            CopyM.gaussJordanElimination();
+                        case "2" :
+                            System.out.println("\nbelom ada buset\n");
                             break;
 
-                        case 3 :
-                            CopyM.Matrix(M);
-                            CopyM.gaussElimination();
+                        case "3" :
+                            M2.writeGaussJordanSolution();
                             break;
 
-                        case 4 :
-                            CopyM.Matrix(M);
-                            CopyM.solution();
+                        case "4" :
+                            System.out.println("\nbelom ada buset\n");
                             break;
 
-                        case 5 :
+                        case "5" :
                             EndCase = true;
                             break;
 
                         default :
-                            System.out.println("\n||Input salah, Masukan input ulang||\n");
+                            System.out.println("\n||Input salah, masukan input ulang||\n");
+                            break;
+                    }
+
+                }
+                break;
+
+            case "3" :
+
+                Matrix M3 = new Matrix();
+                EndCase = false;
+                while (!EndCase) {
+
+                    System.out.print("\n");
+                    System.out.println("||====================================INTERPOLATION============================================||");
+                    System.out.println(">> Pilih menu  :");
+                    System.out.println("1. Input titik dari keyboard");
+                    System.out.println("2. Input titik dari file eksternal");
+                    System.out.println("3. Tampilkan solusi interpolasi ke layar");
+                    System.out.println("4. Tampilkan solusi interpolasi ke file eksternal");
+                    System.out.println("5. Back");
+                    System.out.print(">>");
+
+                    String OptionCase = scan.nextLine();
+                    switch (OptionCase) {
+                        case "1" :
+                            M3.readForInterpolation();
+                            break;
+
+              /*          case "2" :
+                            M3.writeInterpolationSolution();
+                            break;
+              */
+                        case "3" :
+                            M3.writeInterpolationSolution();
+                            break;
+
+            /*          case "4" :
+                            break;
+            */
+                        case "5" :
+                            EndCase = true;
+                            break;
+
+                        default :
+                            System.out.println("\n||Input salah, masukan input ulang||\n");
                             break;
                     }
                 }
                 break;
-*/
-
-            case "3" :
-              Matrix M3 = new Matrix();
-              EndCase = false;
-              while (!EndCase) {
-
-                  System.out.print("\n");
-                  System.out.println("||====================================INTERPOLATION============================================||");
-                  System.out.println(">> Pilih menu  :");
-                  System.out.println("1. Input titik");
-                  System.out.println("2. Tampilkan solusi interpolasi");
-                  System.out.println("3. Back");
-                  System.out.print(">>");
-
-                  String OptionCase = scan.nextLine();
-                  switch (OptionCase) {
-                      case "1" :
-                          M3.readForInterpolation();
-                          break;
-
-                      case "2" :
-                          M3.writeInterpolationSolution();
-                          break;
-
-                      case "3" :
-                          EndCase = true;
-                          break;
-
-                      default :
-                          System.out.println("\n||Input salah, masukan input ulang||\n");
-                          break;
-                  }
-              }
-              break;
 
             case "4" :
                 EndMenu = true;

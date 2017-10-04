@@ -70,6 +70,7 @@ public class Matrix {
     public void read() {
 
         Scanner scan = new Scanner(System.in);
+
         //Read Row
         System.out.println("Masukan jumlah baris : ");
         this.rowSize = scan.nextInt();
@@ -80,12 +81,32 @@ public class Matrix {
 
         //Read element
         System.out.println("===================================================================================================");
-        System.out.println("Input matriks :");
+        System.out.println("Input matriks : ");
         for (int i = 0; i < this.rowSize; i++) {
             for (int j = 0; j < this.colSize; j++) {
                 this.mat[i][j] = scan.nextDouble();
             }
         }
+    }
+
+    public void readForHilbert() {
+
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Masukan dimensi matriks Hilbert : ");
+        this.rowSize = scan.nextInt();
+        this.colSize = this.rowSize + 1;
+
+        for (int i = 0; i < this.rowSize; i ++) {
+            for (int j = 0; j < this.colSize - 1; j ++) {
+                this.mat[i][j] = 1.0 / (i + j + 1.0);
+            }
+        }
+
+        for (int i = 0; i < this.rowSize; i ++) {
+            this.mat[i][this.colSize - 1] = 1.0;
+        }
+
     }
 
     // Read Matrix from shell for interpolation
@@ -347,18 +368,10 @@ public class Matrix {
             // Choose pivot and move it up, skip if pivot is 0
             this.moveUpPivot(currentBaseRow, currentBaseCol);
 
-            System.out.println("Udah di pivot; Row: " + currentBaseRow + " Col: " + currentBaseCol);
-            this.write();
-            System.out.println();
-
             while ((this.mat[currentBaseRow][currentBaseCol] == 0) && (currentBaseCol < this.colSize - 1)) {
                 currentBaseCol ++;
                 this.moveUpPivot(currentBaseRow, currentBaseCol);
             }
-
-            System.out.println("Udah di tambah; Row: " + currentBaseRow + " Col: " + currentBaseCol);
-            this.write();
-            System.out.println();
 
             double pivotDivider = this.mat[currentBaseRow][currentBaseCol];
             this.divideRow(currentBaseRow, pivotDivider);
@@ -376,10 +389,6 @@ public class Matrix {
             }
 
             currentBaseCol ++;
-
-            System.out.println("Udah di gajo");
-            this.write();
-            System.out.println();
 
         }
     }
@@ -459,7 +468,7 @@ public class Matrix {
 
                     int rowIndex = reducedMat.getRowIndexWithLeadingOneAt(i);
                     result += reducedMat.mat[rowIndex][reducedMat.colSize - 1] + " ";
-                    
+
                     for (int j = 0; j < reducedMat.colSize - 1; j ++) {
 
                         if ((reducedMat.mat[rowIndex][j] != 0.0) && (reducedMat.mat[rowIndex][j] != 1.0)) {
