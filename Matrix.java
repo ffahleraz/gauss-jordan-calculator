@@ -183,10 +183,10 @@ public class Matrix {
     }
 
     // Pivoting Point
-    private void moveUpPivot(int currentRow) {
+    private void moveUpPivot(int currentRow, int currentCol) {
 
         // Find max
-        int pivotRow = this.getMaxAbsColIndex(currentRow, currentRow);
+        int pivotRow = this.getMaxAbsColIndex(currentRow, currentCol);
 
         // Swapping
         this.swapRow(currentRow, pivotRow);
@@ -323,11 +323,15 @@ public class Matrix {
         for (; currentBaseRow < this.rowSize; currentBaseRow ++) {
 
             // Choose pivot and move it up, skip if pivot is 0
-            this.moveUpPivot(currentBaseRow);
+            this.moveUpPivot(currentBaseRow, currentBaseCol);
             if (this.mat[currentBaseRow][currentBaseCol] == 0) {
                 currentBaseCol ++;
                 continue;
             }
+
+            System.out.println("Udah di pivot. Col di " + currentBaseCol);
+            this.write();
+            System.out.println();
 
             double pivotDivider = this.mat[currentBaseRow][currentBaseCol];
             this.divideRow(currentBaseRow, pivotDivider);
@@ -345,6 +349,10 @@ public class Matrix {
             }
 
             currentBaseCol ++;
+
+            System.out.println("Udah di gajo");
+            this.write();
+            System.out.println();
 
         }
     }
