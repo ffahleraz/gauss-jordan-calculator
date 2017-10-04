@@ -1,12 +1,10 @@
 import java.util.Scanner;
-import java.io.IOException;
 
 public class Main {
 
   public static void main(String[] args) {
 
     //Variable intialitation
-    Matrix M = new Matrix();
     Scanner scan = new Scanner(System.in);
     boolean EndMenu = false;
     boolean EndCase;
@@ -33,6 +31,7 @@ public class Main {
         switch (OptionMenu) {
             case "1" :
 
+                Matrix M1 = new Matrix();
                 EndCase = false;
                 while (!EndCase) {
 
@@ -48,15 +47,15 @@ public class Main {
                     String OptionCase = scan.nextLine();
                     switch (OptionCase) {
                         case "1" :
-                            M.read();
+                            M1.read();
                             break;
 
                         case "2" :
-                            M.writeGaussJordan();
+                            M1.writeGaussJordan();
                             break;
 
                         case "3" :
-                            M.writeGaussJordanSolution();
+                            M1.writeGaussJordanSolution();
                             break;
 
                         case "4" :
@@ -72,6 +71,7 @@ public class Main {
 
   /*          case 2 :
 
+                Matrix M2 = new Matrix();
                 EndCase = false;
                 while (!EndCase) {
 
@@ -85,11 +85,11 @@ public class Main {
                     int OptionCase = scan.nextInt();
                     switch (OptionCase) {
                         case 1 :
-                            M.read();
+                            M2.read();
                             break;
 
                         case 2 :
-                            CopyM.Matrix(M);
+                            M.Matrix(M);
                             CopyM.gaussJordanElimination();
                             break;
 
@@ -115,7 +115,8 @@ public class Main {
                 break;
 */
 
-case "3" :
+            case "3" :
+              Matrix M3 = new Matrix();
               EndCase = false;
               while (!EndCase) {
 
@@ -130,11 +131,11 @@ case "3" :
                   String OptionCase = scan.nextLine();
                   switch (OptionCase) {
                       case "1" :
-                          M.readForInterpolation();
+                          M3.readForInterpolation();
                           break;
 
                       case "2" :
-                          M.writeInterpolationSolution();
+                          M3.writeInterpolationSolution();
                           break;
 
                       case "3" :

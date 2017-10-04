@@ -79,7 +79,7 @@ public class Matrix {
         this.colSize = scan.nextInt();
 
         //Read element
-        System.out.println("===========================================");
+        System.out.println("===================================================================================================");
         System.out.println("Input matriks :");
         for (int i = 0; i < this.rowSize; i++) {
             for (int j = 0; j < this.colSize; j++) {
@@ -110,7 +110,7 @@ public class Matrix {
         this.colSize = this.rowSize + 1;
 
         // Read points
-        System.out.println("===========================================");
+        System.out.println("===================================================================================================");
         System.out.println("Input titik-titik : ");
         for (int i = 0; i < this.rowSize; i++) {
 
@@ -129,10 +129,18 @@ public class Matrix {
     // Write Matrix to shell
     public void write() {
 
+        if ((this.rowSize == 0) && (this.colSize == 0)) {
+
+            System.out.println("\n||Matriks kosong||");
+
+        }
         for (int i = 0; i < this.rowSize; i++) {
             for (int j = 0; j < this.colSize; j++) {
-                System.out.print(this.mat[i][j]);
+                System.out.format("%.3f",this.mat[i][j]);
                 System.out.print(" ");
+                if (j == (this.colSize -2)) {
+                    System.out.print("| ");
+                }
             }
             System.out.print("\n");
         }
