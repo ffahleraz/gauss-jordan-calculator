@@ -291,8 +291,22 @@ public class Matrix {
     // Returns the index of leading one in a row
     private int getLeadingOneIndex(int currentRow) {
 
-        for (int i = 0; i < this.colSize; i ++) {
-            if (this.mat[currentRow][i] == 1) {
+        boolean isZero = true;
+        for (int i = 0; i < this.colSize - 1; i ++) {
+            if (this.mat[currentRow][i] == 1.0) {
+                return i;
+            }
+        }
+
+        return -1;
+
+    }
+
+    // Returns the index of a row with leading one at a given column
+    private int getRowIndexWithLeadingOneAt(int leadingOneIndex) {
+
+        for (int i = 0; i < this.rowSize; i ++) {
+            if (this.getLeadingOneIndex(i) == leadingOneIndex) {
                 return i;
             }
         }
@@ -328,16 +342,21 @@ public class Matrix {
         int currentBaseCol = 0;
         int currentRow;
 
-        for (; currentBaseRow < this.rowSize; currentBaseRow ++) {
+        for (; (currentBaseRow < this.rowSize) && (currentBaseCol < this.colSize - 1); currentBaseRow ++) {
 
             // Choose pivot and move it up, skip if pivot is 0
             this.moveUpPivot(currentBaseRow, currentBaseCol);
-            if (this.mat[currentBaseRow][currentBaseCol] == 0) {
+
+            System.out.println("Udah di pivot; Row: " + currentBaseRow + " Col: " + currentBaseCol);
+            this.write();
+            System.out.println();
+
+            while ((this.mat[currentBaseRow][currentBaseCol] == 0) && (currentBaseCol < this.colSize - 1)) {
                 currentBaseCol ++;
-                continue;
+                this.moveUpPivot(currentBaseRow, currentBaseCol);
             }
 
-            System.out.println("Udah di pivot. Col di " + currentBaseCol);
+            System.out.println("Udah di tambah; Row: " + currentBaseRow + " Col: " + currentBaseCol);
             this.write();
             System.out.println();
 
@@ -438,11 +457,13 @@ public class Matrix {
 
                 if (!paramMap[i]) {
 
-                    result += reducedMat.mat[i][reducedMat.colSize - 1] + " ";
+                    int rowIndex = reducedMat.getRowIndexWithLeadingOneAt(i);
+                    result += reducedMat.mat[rowIndex][reducedMat.colSize - 1] + " ";
+                    
                     for (int j = 0; j < reducedMat.colSize - 1; j ++) {
 
-                        if ((reducedMat.mat[i][j] != 0.0) && (reducedMat.mat[i][j] != 1.0)) {
-                            result += "+ " + (reducedMat.mat[i][j] * -1.0) + String.valueOf(params[j]) + " ";
+                        if ((reducedMat.mat[rowIndex][j] != 0.0) && (reducedMat.mat[rowIndex][j] != 1.0)) {
+                            result += "+ " + (reducedMat.mat[rowIndex][j] * -1.0) + String.valueOf(params[j]) + " ";
                         }
 
                     }
