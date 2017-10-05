@@ -62,7 +62,7 @@ public class Main {
 
         printLogo();
 
-        System.out.println("||============================ SELAMAT DATANG DI GAUSS-JORDAN ================================||");
+        System.out.println("||=============================== SELAMAT DATANG DI GAUSS-JORDAN ================================||");
         System.out.println();
         System.out.println(">> Pilih menu  :");
         System.out.println("1. Matriks biasa");
