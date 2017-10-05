@@ -69,209 +69,6 @@ public class Matrix {
         return this.colSize;
     }
 
-    // MARK READ
-
-    // Read Matrix from shell
-    public void read() {
-
-        Scanner scan = new Scanner(System.in);
-
-        //Read Row
-        System.out.println("Masukan jumlah baris : ");
-        this.rowSize = scan.nextInt();
-
-        //Read Column
-        System.out.println("Masukan jumlah kolom : ");
-        this.colSize = scan.nextInt();
-
-        //Read element
-        System.out.println("Input matriks : ");
-        for (int i = 0; i < this.rowSize; i++) {
-            for (int j = 0; j < this.colSize; j++) {
-                this.mat[i][j] = scan.nextDouble();
-            }
-        }
-    }
-
-    public void readFromFile() {
-
-        try {
-
-            Scanner scan = new Scanner(System.in);
-            System.out.println("Masukkan nama file eksternal: ");
-            System.out.print(">>");
-            String fileName = scan.nextLine();
-            File file = new File(fileName);
-            Scanner reader = new Scanner(file);
-
-            if (reader.nextLine().equals("BARIS")) {
-              this.rowSize = reader.nextInt();
-            }
-            if (reader.nextLine().equals("KOLOM")) {
-              this.colSize = reader.nextInt();
-
-            }
-
-            for (int row = 0; row < this.rowSize; row++) {
-                   for (int col = 0; col < this.colSize; col++) {
-                       this.mat[row][col] = reader.nextDouble() ;
-                  }
-            }
-
-            reader.close();
-            System.out.println("Berhasil membaca dari file '" + fileName + "'.");
-
-        } catch (IOException i) {
-            System.out.println("Tidak dapat membaca dari file eksternal.");
-        }
-
-    }
-
-
-    public void readForHilbert() {
-
-        Scanner scan = new Scanner(System.in);
-
-        System.out.println("Masukan dimensi matriks Hilbert : ");
-        this.rowSize = scan.nextInt();
-        this.colSize = this.rowSize + 1;
-
-        for (int i = 0; i < this.rowSize; i ++) {
-            for (int j = 0; j < this.colSize - 1; j ++) {
-                this.mat[i][j] = 1.0 / (i + j + 1.0);
-            }
-        }
-
-        for (int i = 0; i < this.rowSize; i ++) {
-            this.mat[i][this.colSize - 1] = 1.0;
-        }
-
-    }
-
-    public void readForHilbertFromFile() {
-
-        try {
-
-            Scanner scan = new Scanner(System.in);
-            System.out.println("Masukkan nama file eksternal: ");
-            System.out.print(">>");
-            String fileName = scan.nextLine();
-            File file = new File(fileName);
-            Scanner reader = new Scanner(file);
-
-            if (reader.nextLine().equals("DIMENSI")) {
-              this.rowSize = reader.nextInt();
-              this.colSize = this.rowSize + 1;
-            }
-
-            for (int i = 0; i < this.rowSize; i ++) {
-                for (int j = 0; j < this.colSize - 1; j ++) {
-                    this.mat[i][j] = 1.0 / (i + j + 1.0);
-                }
-            }
-
-            for (int i = 0; i < this.rowSize; i ++) {
-                this.mat[i][this.colSize - 1] = 1.0;
-            }
-
-            reader.close();
-            System.out.println("Berhasil membaca dari file '" + fileName + "'.");
-
-        } catch (IOException i) {
-            System.out.println("Tidak dapat membaca dari file eksternal.");
-        }
-
-    }
-
-    // Read Matrix from shell for interpolation
-    public void readForInterpolation() {
-
-        Scanner scan = new Scanner(System.in);
-        double x, y;
-
-        // Read number of points
-        while (this.rowSize < 1) {
-
-            System.out.println("Masukkan jumlah titik yang diketahui : ");
-            this.rowSize = scan.nextInt();
-
-            if (this.rowSize < 1) {
-                System.out.println("Jumlah titik harus lebih dari 0.");
-            }
-
-        }
-
-        // Assign row size
-        this.colSize = this.rowSize + 1;
-
-        // Read points
-        System.out.println("Input titik-titik : ");
-        for (int i = 0; i < this.rowSize; i++) {
-
-            System.out.print("X" + (i + 1) + " = ");
-            x = scan.nextDouble();
-            System.out.print("f(X" + (i + 1) + ") = ");
-            y = scan.nextDouble();
-
-            for (int j = 0; j < this.colSize - 1; j ++) {
-                this.mat[i][this.colSize - 2 - j] = power(x, j);
-            }
-
-            this.mat[i][this.colSize - 1] = y;
-
-        }
-    }
-
-    public void readForInterpolationFromFile() {
-
-        try {
-
-            Scanner scan = new Scanner(System.in);
-            System.out.println("Masukkan nama file eksternal: ");
-            System.out.print(">>");
-            String fileName = scan.nextLine();
-            File file = new File(fileName);
-            Scanner reader = new Scanner(file);
-
-            double x, y;
-
-            if (reader.nextLine().equals("JUMLAH")) {
-              this.rowSize = reader.nextInt();
-              this.colSize = this.rowSize + 1;
-            }
-
-            for (int i = 0; i < this.rowSize; i++) {
-
-                if (reader.nextLine().equals("f(")) {
-                    x = scan.nextDouble();
-                    if (reader.nextLine().equals(") =")) {
-                        y = scan.nextDouble();
-                    } else {
-                        System.out.println("Format file eksternal salah.");
-                        break;
-                    }
-                } else {
-                    System.out.println("Format file eksternal salah.");
-                    break;
-                }
-
-                for (int j = 0; j < this.colSize - 1; j ++) {
-                    this.mat[i][this.colSize - 2 - j] = power(x, j);
-                }
-
-                this.mat[i][this.colSize - 1] = y;
-
-            }
-
-            reader.close();
-            System.out.println("Berhasil membaca dari file '" + fileName + "'.");
-
-        } catch (IOException i) {
-            System.out.println("Tidak dapat membaca dari file eksternal.");
-        }
-
-    }
-
     private double power(double x, int power) {
 
         double result = 1.0;
@@ -280,6 +77,10 @@ public class Matrix {
         }
         return result;
     }
+
+    /*
+     *  MARK OPERATIONS
+     */
 
     // Find a row with the max value in a particular column from a particular row
     private int getMaxAbsColIndex(int currentRow, int currentCol){
@@ -507,7 +308,213 @@ public class Matrix {
         }
     }
 
-    // MARK WRITE
+    /*
+     *  MARK READ
+     */
+
+    // Read Matrix from shell
+    public void read() {
+
+        Scanner scan = new Scanner(System.in);
+
+        //Read Row
+        System.out.println("Masukan jumlah baris : ");
+        this.rowSize = scan.nextInt();
+
+        //Read Column
+        System.out.println("Masukan jumlah kolom : ");
+        this.colSize = scan.nextInt();
+
+        //Read element
+        System.out.println("Input matriks : ");
+        for (int i = 0; i < this.rowSize; i++) {
+            for (int j = 0; j < this.colSize; j++) {
+                this.mat[i][j] = scan.nextDouble();
+            }
+        }
+    }
+
+    public void readFromFile() {
+
+        try {
+
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Masukkan nama file eksternal: ");
+            System.out.print(">>");
+            String fileName = scan.nextLine();
+            File file = new File(fileName);
+            Scanner reader = new Scanner(file);
+
+            if (reader.nextLine().equals("BARIS")) {
+              this.rowSize = reader.nextInt();
+            }
+            if (reader.nextLine().equals("KOLOM")) {
+              this.colSize = reader.nextInt();
+
+            }
+
+            for (int row = 0; row < this.rowSize; row++) {
+                   for (int col = 0; col < this.colSize; col++) {
+                       this.mat[row][col] = reader.nextDouble() ;
+                  }
+            }
+
+            reader.close();
+            System.out.println("Berhasil membaca dari file '" + fileName + "'.");
+
+        } catch (IOException i) {
+            System.out.println("Tidak dapat membaca dari file eksternal.");
+        }
+
+    }
+
+    public void readForHilbert() {
+
+        Scanner scan = new Scanner(System.in);
+
+        System.out.println("Masukan dimensi matriks Hilbert : ");
+        this.rowSize = scan.nextInt();
+        this.colSize = this.rowSize + 1;
+
+        for (int i = 0; i < this.rowSize; i ++) {
+            for (int j = 0; j < this.colSize - 1; j ++) {
+                this.mat[i][j] = 1.0 / (i + j + 1.0);
+            }
+        }
+
+        for (int i = 0; i < this.rowSize; i ++) {
+            this.mat[i][this.colSize - 1] = 1.0;
+        }
+
+    }
+
+    public void readForHilbertFromFile() {
+
+        try {
+
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Masukkan nama file eksternal: ");
+            System.out.print(">>");
+            String fileName = scan.nextLine();
+            File file = new File(fileName);
+            Scanner reader = new Scanner(file);
+
+            if (reader.nextLine().equals("DIMENSI")) {
+              this.rowSize = reader.nextInt();
+              this.colSize = this.rowSize + 1;
+            }
+
+            for (int i = 0; i < this.rowSize; i ++) {
+                for (int j = 0; j < this.colSize - 1; j ++) {
+                    this.mat[i][j] = 1.0 / (i + j + 1.0);
+                }
+            }
+
+            for (int i = 0; i < this.rowSize; i ++) {
+                this.mat[i][this.colSize - 1] = 1.0;
+            }
+
+            reader.close();
+            System.out.println("Berhasil membaca dari file '" + fileName + "'.");
+
+        } catch (IOException i) {
+            System.out.println("Tidak dapat membaca dari file eksternal.");
+        }
+
+    }
+
+    // Read Matrix from shell for interpolation
+    public void readForInterpolation() {
+
+        Scanner scan = new Scanner(System.in);
+        double x, y;
+
+        // Read number of points
+        while (this.rowSize < 1) {
+
+            System.out.println("Masukkan jumlah titik yang diketahui : ");
+            this.rowSize = scan.nextInt();
+
+            if (this.rowSize < 1) {
+                System.out.println("Jumlah titik harus lebih dari 0.");
+            }
+
+        }
+
+        // Assign row size
+        this.colSize = this.rowSize + 1;
+
+        // Read points
+        System.out.println("Input titik-titik : ");
+        for (int i = 0; i < this.rowSize; i++) {
+
+            System.out.print("X" + (i + 1) + " = ");
+            x = scan.nextDouble();
+            System.out.print("f(X" + (i + 1) + ") = ");
+            y = scan.nextDouble();
+
+            for (int j = 0; j < this.colSize - 1; j ++) {
+                this.mat[i][this.colSize - 2 - j] = power(x, j);
+            }
+
+            this.mat[i][this.colSize - 1] = y;
+
+        }
+    }
+
+    public void readForInterpolationFromFile() {
+
+        try {
+
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Masukkan nama file eksternal: ");
+            System.out.print(">>");
+            String fileName = scan.nextLine();
+            File file = new File(fileName);
+            Scanner reader = new Scanner(file);
+
+            double x, y;
+
+            if (reader.nextLine().equals("JUMLAH")) {
+              this.rowSize = reader.nextInt();
+              this.colSize = this.rowSize + 1;
+            }
+
+            for (int i = 0; i < this.rowSize; i++) {
+
+                if (reader.nextLine().equals("f(")) {
+                    x = scan.nextDouble();
+                    if (reader.nextLine().equals(") =")) {
+                        y = scan.nextDouble();
+                    } else {
+                        System.out.println("Format file eksternal salah.");
+                        break;
+                    }
+                } else {
+                    System.out.println("Format file eksternal salah.");
+                    break;
+                }
+
+                for (int j = 0; j < this.colSize - 1; j ++) {
+                    this.mat[i][this.colSize - 2 - j] = power(x, j);
+                }
+
+                this.mat[i][this.colSize - 1] = y;
+
+            }
+
+            reader.close();
+            System.out.println("Berhasil membaca dari file '" + fileName + "'.");
+
+        } catch (IOException i) {
+            System.out.println("Tidak dapat membaca dari file eksternal.");
+        }
+
+    }
+
+    /*
+     *  MARK WRITE
+     */
 
     // Write Matrix to shell
     public void write() {
@@ -564,8 +571,60 @@ public class Matrix {
     }
 
     // Menuliskan hasil operasi hampiran dari hasil interpolasi
-    // Prekondisi : sudah melakukan interpolasi
-    
+    public void writeInterpolationAsFunctionApproximation() {
+
+        Matrix reducedMat = new Matrix(this);
+        reducedMat.gaussJordanElimination();
+
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Masukkan nilai X:");
+        double x = scan.nextDouble();
+
+        System.out.print("Nilai hampiran dari f(X) = ");
+
+        double result = 0.0;
+        for (int i = 0; i < reducedMat.rowSize; i ++) {
+            result += power(reducedMat.mat[i][reducedMat.colSize - 1], this.rowSize - 1 - i);
+        }
+
+        System.out.println(result);
+
+    }
+
+    // Menuliskan hasil operasi hampiran dari hasil interpolasi ke file eksternal
+    public void writeInterpolationAsFunctionApproximationToFile() {
+
+        try {
+
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Masukkan nama file eksternal: ");
+            System.out.print(">>");
+            String fileName = scan.nextLine();
+            PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+
+            Matrix reducedMat = new Matrix(this);
+            reducedMat.gaussJordanElimination();
+
+            System.out.println("Masukkan nilai X:");
+            double x = scan.nextDouble();
+
+            writer.print("Nilai hampiran dari f(X) = ");
+
+            double result = 0.0;
+            for (int i = 0; i < reducedMat.rowSize; i ++) {
+                result += power(reducedMat.mat[i][reducedMat.colSize - 1], this.rowSize - 1 - i);
+            }
+
+            writer.println(result);
+
+            writer.close();
+            System.out.println("Berhasil menulis ke file '" + fileName + "'.");
+
+        } catch (IOException e) {
+              System.out.println("Tidak dapat menulis ke file eksternal.");
+        }
+
+    }
 
     public void writeGaussJordan() {
 
@@ -592,10 +651,8 @@ public class Matrix {
         System.out.print("f(X) = ");
 
         for (int i = 0; i < reducedMat.rowSize; i ++) {
-            System.out.print(reducedMat.mat[i][reducedMat.colSize - 1] + "X^" + (this.rowSize - 1 - i) + " ");
+            System.out.println(reducedMat.mat[i][reducedMat.colSize - 1] + "X^" + (this.rowSize - 1 - i) + " ");
         }
-
-        System.out.println();
 
     }
 
@@ -616,10 +673,8 @@ public class Matrix {
             writer.print("f(X) = ");
 
             for (int i = 0; i < reducedMat.rowSize; i ++) {
-                writer.print(reducedMat.mat[i][reducedMat.colSize - 1] + "X^" + (this.rowSize - 1 - i) + " ");
+                writer.println(reducedMat.mat[i][reducedMat.colSize - 1] + "X^" + (this.rowSize - 1 - i) + " ");
             }
-
-            writer.println();
 
             writer.close();
             System.out.println("Berhasil menulis ke file '" + fileName + "'.");
