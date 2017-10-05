@@ -1,6 +1,9 @@
 import java.util.Scanner;
+import java.io.PrintWriter;
+import java.io.IOException;
+import java.io.File;
 
-//Class Matriks
+// Matrix Class
 public class Matrix {
 
     // Variables
@@ -66,6 +69,8 @@ public class Matrix {
         return this.colSize;
     }
 
+    // MARK READ
+
     // Read Matrix from shell
     public void read() {
 
@@ -80,7 +85,6 @@ public class Matrix {
         this.colSize = scan.nextInt();
 
         //Read element
-        System.out.println("===================================================================================================");
         System.out.println("Input matriks : ");
         for (int i = 0; i < this.rowSize; i++) {
             for (int j = 0; j < this.colSize; j++) {
@@ -88,6 +92,41 @@ public class Matrix {
             }
         }
     }
+
+    public void readFromFile() {
+
+        try {
+
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Masukkan nama file eksternal: ");
+            System.out.print(">>");
+            String fileName = scan.nextLine();
+            File file = new File(fileName);
+            Scanner reader = new Scanner(file);
+
+            if (reader.nextLine().equals("BARIS")) {
+              this.rowSize = reader.nextInt();
+            }
+            if (reader.nextLine().equals("KOLOM")) {
+              this.colSize = reader.nextInt();
+
+            }
+
+            for (int row = 0; row < this.rowSize; row++) {
+                   for (int col = 0; col < this.colSize; col++) {
+                       this.mat[row][col] = reader.nextDouble() ;
+                  }
+            }
+
+            reader.close();
+            System.out.println("Berhasil membaca dari file '" + fileName + "'.");
+
+        } catch (IOException i) {
+            System.out.println("Tidak dapat membaca dari file eksternal.");
+        }
+
+    }
+
 
     public void readForHilbert() {
 
@@ -109,6 +148,41 @@ public class Matrix {
 
     }
 
+    public void readForHilbertFromFile() {
+
+        try {
+
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Masukkan nama file eksternal: ");
+            System.out.print(">>");
+            String fileName = scan.nextLine();
+            File file = new File(fileName);
+            Scanner reader = new Scanner(file);
+
+            if (reader.nextLine().equals("DIMENSI")) {
+              this.rowSize = reader.nextInt();
+              this.colSize = this.rowSize + 1;
+            }
+
+            for (int i = 0; i < this.rowSize; i ++) {
+                for (int j = 0; j < this.colSize - 1; j ++) {
+                    this.mat[i][j] = 1.0 / (i + j + 1.0);
+                }
+            }
+
+            for (int i = 0; i < this.rowSize; i ++) {
+                this.mat[i][this.colSize - 1] = 1.0;
+            }
+
+            reader.close();
+            System.out.println("Berhasil membaca dari file '" + fileName + "'.");
+
+        } catch (IOException i) {
+            System.out.println("Tidak dapat membaca dari file eksternal.");
+        }
+
+    }
+
     // Read Matrix from shell for interpolation
     public void readForInterpolation() {
 
@@ -118,7 +192,7 @@ public class Matrix {
         // Read number of points
         while (this.rowSize < 1) {
 
-            System.out.println("Masukkan jumlah titik : ");
+            System.out.println("Masukkan jumlah titik yang diketahui : ");
             this.rowSize = scan.nextInt();
 
             if (this.rowSize < 1) {
@@ -131,11 +205,12 @@ public class Matrix {
         this.colSize = this.rowSize + 1;
 
         // Read points
-        System.out.println("===================================================================================================");
         System.out.println("Input titik-titik : ");
         for (int i = 0; i < this.rowSize; i++) {
 
+            System.out.print("X" + (i + 1) + " = ");
             x = scan.nextDouble();
+            System.out.print("f(X" + (i + 1) + ") = ");
             y = scan.nextDouble();
 
             for (int j = 0; j < this.colSize - 1; j ++) {
@@ -147,24 +222,54 @@ public class Matrix {
         }
     }
 
-    // Write Matrix to shell
-    public void write() {
+    public void readForInterpolationFromFile() {
 
-        if ((this.rowSize == 0) && (this.colSize == 0)) {
+        try {
 
-            System.out.println("\n||Matriks kosong||");
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Masukkan nama file eksternal: ");
+            System.out.print(">>");
+            String fileName = scan.nextLine();
+            File file = new File(fileName);
+            Scanner reader = new Scanner(file);
 
-        }
-        for (int i = 0; i < this.rowSize; i++) {
-            for (int j = 0; j < this.colSize; j++) {
-                System.out.format("%.3f",this.mat[i][j]);
-                System.out.print(" ");
-                if (j == (this.colSize -2)) {
-                    System.out.print("| ");
-                }
+            double x, y;
+
+            if (reader.nextLine().equals("JUMLAH")) {
+              this.rowSize = reader.nextInt();
+              this.colSize = this.rowSize + 1;
             }
-            System.out.print("\n");
+
+            for (int i = 0; i < this.rowSize; i++) {
+
+                if (reader.nextLine().equals("f(")) {
+                    x = scan.nextDouble();
+                    if (reader.nextLine().equals(") =")) {
+                        y = scan.nextDouble();
+                    } else {
+                        System.out.println("Format file eksternal salah.");
+                        break;
+                    }
+                } else {
+                    System.out.println("Format file eksternal salah.");
+                    break;
+                }
+
+                for (int j = 0; j < this.colSize - 1; j ++) {
+                    this.mat[i][this.colSize - 2 - j] = power(x, j);
+                }
+
+                this.mat[i][this.colSize - 1] = y;
+
+            }
+
+            reader.close();
+            System.out.println("Berhasil membaca dari file '" + fileName + "'.");
+
+        } catch (IOException i) {
+            System.out.println("Tidak dapat membaca dari file eksternal.");
         }
+
     }
 
     private double power(double x, int power) {
@@ -365,12 +470,21 @@ public class Matrix {
 
         for (; (currentBaseRow < this.rowSize) && (currentBaseCol < this.colSize - 1); currentBaseRow ++) {
 
+            /*/ DEBUG
+            this.write();
+            System.out.println();
+            /*/
+
             // Choose pivot and move it up, skip if pivot is 0
             this.moveUpPivot(currentBaseRow, currentBaseCol);
 
             while ((this.mat[currentBaseRow][currentBaseCol] == 0) && (currentBaseCol < this.colSize - 1)) {
                 currentBaseCol ++;
                 this.moveUpPivot(currentBaseRow, currentBaseCol);
+            }
+
+            if (currentBaseCol > this.colSize - 2) {
+                break;
             }
 
             double pivotDivider = this.mat[currentBaseRow][currentBaseCol];
@@ -393,6 +507,66 @@ public class Matrix {
         }
     }
 
+    // MARK WRITE
+
+    // Write Matrix to shell
+    public void write() {
+
+        if ((this.rowSize == 0) && (this.colSize == 0)) {
+
+            System.out.println("\n||Matriks kosong||");
+
+        }
+        for (int i = 0; i < this.rowSize; i++) {
+            for (int j = 0; j < this.colSize; j++) {
+                System.out.format("%.3f",this.mat[i][j]);
+                System.out.print(" ");
+                if (j == (this.colSize -2)) {
+                    System.out.print("| ");
+                }
+            }
+            System.out.print("\n");
+        }
+    }
+
+    // Write Matrix to external file
+    public void writeToFile() {
+
+        try {
+
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Masukkan nama file eksternal: ");
+            System.out.print(">>");
+            String fileName = scan.nextLine();
+            PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+
+            if ((this.rowSize == 0) && (this.colSize == 0)) {
+                writer.println("\n||Matriks kosong||");
+            }
+            for (int i = 0; i < this.rowSize; i++) {
+                for (int j = 0; j < this.colSize; j++) {
+                    writer.format("%.3f",this.mat[i][j]);
+                    writer.print(" ");
+                    if (j == (this.colSize -2)) {
+                        writer.print("| ");
+                    }
+                }
+                writer.print("\n");
+            }
+
+            writer.close();
+            System.out.println("Berhasil menulis ke file '" + fileName + "'.");
+
+        } catch (IOException e) {
+              System.out.println("Tidak dapat menulis ke file eksternal.");
+        }
+
+    }
+
+    // Menuliskan hasil operasi hampiran dari hasil interpolasi
+    // Prekondisi : sudah melakukan interpolasi
+    
+
     public void writeGaussJordan() {
 
         Matrix reducedMat = new Matrix(this);
@@ -401,11 +575,21 @@ public class Matrix {
 
     }
 
-    // TODO : Interpolation
+    public void writeGaussJordanToFile() {
+
+        Matrix reducedMat = new Matrix(this);
+        reducedMat.gaussJordanElimination();
+        reducedMat.writeToFile();
+
+    }
+
     public void writeInterpolationSolution() {
 
         Matrix reducedMat = new Matrix(this);
         reducedMat.gaussJordanElimination();
+
+        System.out.println("Hasil interpolasi fungsi:");
+        System.out.print("f(X) = ");
 
         for (int i = 0; i < reducedMat.rowSize; i ++) {
             System.out.print(reducedMat.mat[i][reducedMat.colSize - 1] + "X^" + (this.rowSize - 1 - i) + " ");
@@ -415,23 +599,50 @@ public class Matrix {
 
     }
 
+    public void writeInterpolationSolutionToFile() {
+
+        try {
+
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Masukkan nama file eksternal: ");
+            System.out.print(">>");
+            String fileName = scan.nextLine();
+            PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+
+            Matrix reducedMat = new Matrix(this);
+            reducedMat.gaussJordanElimination();
+
+            writer.println("Hasil interpolasi fungsi:");
+            writer.print("f(X) = ");
+
+            for (int i = 0; i < reducedMat.rowSize; i ++) {
+                writer.print(reducedMat.mat[i][reducedMat.colSize - 1] + "X^" + (this.rowSize - 1 - i) + " ");
+            }
+
+            writer.println();
+
+            writer.close();
+            System.out.println("Berhasil menulis ke file '" + fileName + "'.");
+
+        } catch (IOException e) {
+              System.out.println("Tidak dapat menulis ke file eksternal.");
+        }
+
+    }
+
     public void writeGaussJordanSolution() {
 
         Matrix reducedMat = new Matrix(this);
         reducedMat.gaussJordanElimination();
         reducedMat.deleteZeroRows();
 
-        if ((this.rowSize == 0) && (this.colSize == 0)) {
-
-            System.out.println("\n||Matriks kosong||");
-
-        } else if (reducedMat.isNoSolution()) {
+        if (reducedMat.isNoSolution()) {
 
             System.out.println("Sistem persamaan tidak memiliki solusi.");
 
         } else if (reducedMat.isInfiniteSolution()) {
 
-            System.out.println("Sistem persamaan memiliki banyak solusi.");
+            System.out.println("Sistem persamaan memiliki banyak solusi. Bentuk paramtetrik nya:");
 
             String paramChars = "pqrstuvwxyzabcdefghijklmno";
             boolean paramMap[] = new boolean[reducedMat.colSize - 1];
@@ -487,10 +698,105 @@ public class Matrix {
 
         } else {
 
+            System.out.println("Sistem persamaan memiliki solusi unik:");
+
             for (int i = 0; i < reducedMat.rowSize; i ++) {
                 System.out.println("X" + (i + 1) + " = " + reducedMat.mat[i][reducedMat.colSize - 1]);
             }
 
+        }
+
+    }
+
+    public void writeGaussJordanSolutionToFile() {
+
+        try {
+
+            Scanner scan = new Scanner(System.in);
+            System.out.println("Masukkan nama file eksternal: ");
+            System.out.print(">>");
+            String fileName = scan.nextLine();
+            PrintWriter writer = new PrintWriter(fileName, "UTF-8");
+
+            Matrix reducedMat = new Matrix(this);
+            reducedMat.gaussJordanElimination();
+            reducedMat.deleteZeroRows();
+
+            if (reducedMat.isNoSolution()) {
+
+                writer.println("Sistem persamaan tidak memiliki solusi.");
+
+            } else if (reducedMat.isInfiniteSolution()) {
+
+                writer.println("Sistem persamaan memiliki banyak solusi. Bentuk paramtetrik nya:");
+
+                String paramChars = "pqrstuvwxyzabcdefghijklmno";
+                boolean paramMap[] = new boolean[reducedMat.colSize - 1];
+                char params[] = new char[reducedMat.colSize - 1];
+
+                // Initialize parameters array
+                for (int i = 0; i < paramMap.length; i ++) {
+                    paramMap[i] = true;
+                    params[i] = '\0';
+                }
+
+                // Assign parametric variables
+                for (int i = 0; i < reducedMat.rowSize; i ++) {
+                    int leadingOneIndex = reducedMat.getLeadingOneIndex(i);
+                    if (leadingOneIndex != -1) {
+                        paramMap[leadingOneIndex] = false;
+                    }
+                }
+
+                // Assign parameters
+                int paramCount = 0;
+                for (int i = 0; i < paramMap.length; i ++) {
+                    if (paramMap[i] == true) {
+                        params[i] = paramChars.charAt(paramCount);
+                        paramCount ++;
+                    }
+                }
+
+                for (int i = 0; i < paramMap.length; i ++) {
+
+                    String result = "X" + (i + 1) + " = ";
+
+                    if (!paramMap[i]) {
+
+                        int rowIndex = reducedMat.getRowIndexWithLeadingOneAt(i);
+                        result += reducedMat.mat[rowIndex][reducedMat.colSize - 1] + " ";
+
+                        for (int j = 0; j < reducedMat.colSize - 1; j ++) {
+
+                            if ((reducedMat.mat[rowIndex][j] != 0.0) && (reducedMat.mat[rowIndex][j] != 1.0)) {
+                                result += "+ " + (reducedMat.mat[rowIndex][j] * -1.0) + String.valueOf(params[j]) + " ";
+                            }
+
+                        }
+
+                    } else {
+                        result += params[i];
+                    }
+
+                    writer.println(result);
+
+                }
+
+            } else {
+
+                writer.println("Sistem persamaan memiliki solusi unik:");
+
+                for (int i = 0; i < reducedMat.rowSize; i ++) {
+                    writer.println("X" + (i + 1) + " = " + reducedMat.mat[i][reducedMat.colSize - 1]);
+                }
+
+            }
+
+            writer.close();
+            System.out.println("Berhasil menulis ke file '" + fileName + "'.");
+
+        } catch (IOException e) {
+              System.out.println("Tidak dapat menulis ke file eksternal.");
         }
 
     }

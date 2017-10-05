@@ -61,10 +61,10 @@ public class Main {
                             M1.writeGaussJordanSolution();
                             break;
 
-            /*            case "4" :
-                            M1.writeToFile(M1);
+                        case "4" :
+                            M1.writeGaussJordanSolutionToFile();
                             break;
-            */
+
                         case "5" :
                             EndCase = true;
                             break;
@@ -107,7 +107,7 @@ public class Main {
                             break;
 
                         case "4" :
-                            System.out.println("\nbelom ada buset\n");
+                            M2.writeGaussJordanSolutionToFile();
                             break;
 
                         case "5" :
@@ -152,9 +152,10 @@ public class Main {
                             M3.writeInterpolationSolution();
                             break;
 
-            /*          case "4" :
+                        case "4" :
+                            M3.writeInterpolationSolutionToFile();
                             break;
-            */
+
                         case "5" :
                             EndCase = true;
                             break;

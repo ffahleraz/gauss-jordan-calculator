@@ -6,6 +6,6 @@ Usage:
 2. Run the program using this command: "java Main"
 
 By :
-Faza Fahleraz 13516095,
-M. Adhipradhana 13516035,
-M. Farhan 13516093.
+- Faza Fahleraz 13516095,
+- M. Adhipradhana 13516035,
+- M. Farhan 13516093.
