@@ -2,6 +2,8 @@ import java.util.Scanner;
 import java.io.PrintWriter;
 import java.io.IOException;
 import java.io.File;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 // Matrix Class
 public class Matrix {
@@ -82,6 +84,11 @@ public class Matrix {
      *  MARK OPERATIONS
      */
 
+    private void clear() {
+        this.rowSize = 0;
+        this.colSize = 0;
+    }
+
     // Find a row with the max value in a particular column from a particular row
     private int getMaxAbsColIndex(int currentRow, int currentCol){
 
@@ -99,7 +106,7 @@ public class Matrix {
     }
 
     // Swap two rows
-    private void swapRow(int row1Index, int row2Index){
+    private void swapRow(int row1Index, int row2Index) {
 
         // Temporary row
         double[] tempRow = new double[this.colSize];
@@ -429,13 +436,17 @@ public class Matrix {
         Scanner scan = new Scanner(System.in);
         double x, y;
 
+        this.clear();
+
         // Read number of points
         while (this.rowSize < 1) {
 
-            System.out.println("Masukkan jumlah titik yang diketahui : ");
+            System.out.println();
+            System.out.print("Masukkan jumlah titik yang diketahui: ");
             this.rowSize = scan.nextInt();
 
             if (this.rowSize < 1) {
+                System.out.println();
                 System.out.println("Jumlah titik harus lebih dari 0.");
             }
 
@@ -445,7 +456,8 @@ public class Matrix {
         this.colSize = this.rowSize + 1;
 
         // Read points
-        System.out.println("Input titik-titik : ");
+        System.out.println();
+        System.out.println("Input titik-titik: ");
         for (int i = 0; i < this.rowSize; i++) {
 
             System.out.print("X" + (i + 1) + " = ");
@@ -467,32 +479,58 @@ public class Matrix {
         try {
 
             Scanner scan = new Scanner(System.in);
-            System.out.println("Masukkan nama file eksternal: ");
-            System.out.print(">>");
+            System.out.println();
+            System.out.print("Masukkan nama file eksternal: ");
             String fileName = scan.nextLine();
             File file = new File(fileName);
             Scanner reader = new Scanner(file);
 
             double x, y;
+            String buffer;
 
-            if (reader.nextLine().equals("JUMLAH")) {
+            buffer = reader.next();
+            if (buffer.equals("JUMLAH")) {
               this.rowSize = reader.nextInt();
               this.colSize = this.rowSize + 1;
             }
+            buffer = reader.nextLine();
 
-            for (int i = 0; i < this.rowSize; i++) {
+            for (int i = 0; i < this.rowSize; i ++) {
 
-                if (reader.nextLine().equals("f(")) {
-                    x = scan.nextDouble();
-                    if (reader.nextLine().equals(") =")) {
-                        y = scan.nextDouble();
-                    } else {
+                buffer = reader.nextLine();
+
+                Pattern p = Pattern.compile("\\d+\\.\\d+");
+                Matcher m = p.matcher(buffer);
+
+                x = 0;
+                y = 0;
+
+                int count = 0;
+                try {
+
+                    while (m.find()) {
+                        x = Double.parseDouble(m.group());
+                        count ++;
+                        break;
+                    }
+                    while (m.find()) {
+                        y = Double.parseDouble(m.group());
+                        count ++;
+                        break;
+                    }
+
+                    if (count != 2) {
+                        System.out.println();
                         System.out.println("Format file eksternal salah.");
                         break;
                     }
-                } else {
+
+                } catch(Exception e) {
+
+                    System.out.println();
                     System.out.println("Format file eksternal salah.");
                     break;
+
                 }
 
                 for (int j = 0; j < this.colSize - 1; j ++) {
@@ -504,9 +542,11 @@ public class Matrix {
             }
 
             reader.close();
+            System.out.println();
             System.out.println("Berhasil membaca dari file '" + fileName + "'.");
 
         } catch (IOException i) {
+            System.out.println();
             System.out.println("Tidak dapat membaca dari file eksternal.");
         }
 
@@ -577,14 +617,16 @@ public class Matrix {
         reducedMat.gaussJordanElimination();
 
         Scanner scan = new Scanner(System.in);
-        System.out.println("Masukkan nilai X:");
+        System.out.println();
+        System.out.print("Masukkan nilai X: ");
         double x = scan.nextDouble();
 
+        System.out.println();
         System.out.print("Nilai hampiran dari f(X) = ");
 
         double result = 0.0;
         for (int i = 0; i < reducedMat.rowSize; i ++) {
-            result += power(reducedMat.mat[i][reducedMat.colSize - 1], this.rowSize - 1 - i);
+            result += reducedMat.mat[i][reducedMat.colSize - 1] * power(x, this.rowSize - 1 - i);
         }
 
         System.out.println(result);
@@ -597,31 +639,34 @@ public class Matrix {
         try {
 
             Scanner scan = new Scanner(System.in);
-            System.out.println("Masukkan nama file eksternal: ");
-            System.out.print(">>");
+            System.out.println();
+            System.out.print("Masukkan nama file eksternal: ");
             String fileName = scan.nextLine();
             PrintWriter writer = new PrintWriter(fileName, "UTF-8");
 
             Matrix reducedMat = new Matrix(this);
             reducedMat.gaussJordanElimination();
 
-            System.out.println("Masukkan nilai X:");
+            System.out.println();
+            System.out.print("Masukkan nilai X:");
             double x = scan.nextDouble();
 
             writer.print("Nilai hampiran dari f(X) = ");
 
             double result = 0.0;
             for (int i = 0; i < reducedMat.rowSize; i ++) {
-                result += power(reducedMat.mat[i][reducedMat.colSize - 1], this.rowSize - 1 - i);
+                result += reducedMat.mat[i][reducedMat.colSize - 1] * power(x, this.rowSize - 1 - i);
             }
 
             writer.println(result);
 
             writer.close();
+            System.out.println();
             System.out.println("Berhasil menulis ke file '" + fileName + "'.");
 
         } catch (IOException e) {
-              System.out.println("Tidak dapat menulis ke file eksternal.");
+            System.out.println();
+            System.out.println("Tidak dapat menulis ke file eksternal.");
         }
 
     }
@@ -647,12 +692,15 @@ public class Matrix {
         Matrix reducedMat = new Matrix(this);
         reducedMat.gaussJordanElimination();
 
+        System.out.println();
         System.out.println("Hasil interpolasi fungsi:");
         System.out.print("f(X) = ");
 
         for (int i = 0; i < reducedMat.rowSize; i ++) {
-            System.out.println(reducedMat.mat[i][reducedMat.colSize - 1] + "X^" + (this.rowSize - 1 - i) + " ");
+            System.out.print(reducedMat.mat[i][reducedMat.colSize - 1] + "X^" + (this.rowSize - 1 - i) + " ");
         }
+
+        System.out.println();
 
     }
 
@@ -661,8 +709,8 @@ public class Matrix {
         try {
 
             Scanner scan = new Scanner(System.in);
-            System.out.println("Masukkan nama file eksternal: ");
-            System.out.print(">>");
+            System.out.println();
+            System.out.print("Masukkan nama file eksternal: ");
             String fileName = scan.nextLine();
             PrintWriter writer = new PrintWriter(fileName, "UTF-8");
 
@@ -673,14 +721,18 @@ public class Matrix {
             writer.print("f(X) = ");
 
             for (int i = 0; i < reducedMat.rowSize; i ++) {
-                writer.println(reducedMat.mat[i][reducedMat.colSize - 1] + "X^" + (this.rowSize - 1 - i) + " ");
+                writer.print(reducedMat.mat[i][reducedMat.colSize - 1] + "X^" + (this.rowSize - 1 - i) + " ");
             }
 
+            writer.println();
+
             writer.close();
+            System.out.println();
             System.out.println("Berhasil menulis ke file '" + fileName + "'.");
 
         } catch (IOException e) {
-              System.out.println("Tidak dapat menulis ke file eksternal.");
+            System.out.println();
+            System.out.println("Tidak dapat menulis ke file eksternal.");
         }
 
     }

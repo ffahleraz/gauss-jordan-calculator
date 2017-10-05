@@ -2,6 +2,24 @@ import java.util.Scanner;
 
 public class Main {
 
+    private final static void clearConsole() {
+
+        try {
+            final String os = System.getProperty("os.name");
+
+            if (os.contains("Windows")) {
+                Runtime.getRuntime().exec("cls");
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (final Exception e) {
+            //  Handle any exceptions.
+            System.out.println("llll");
+        }
+
+    }
+
   public static void main(String[] args) {
 
     //Variable intialitation
@@ -10,6 +28,9 @@ public class Main {
     boolean EndCase;
 
     while (!EndMenu) {
+
+        clearConsole();
+
         System.out.println("===================================================================================================");
         System.out.println("  ____     _     _   _  ____   ____              _   ___   ____   ____      _     _   _ ");
         System.out.println(" / ___|   / \\   | | | |/ ___| / ___|            | | / _ \\ |  _ \\ |  _ \\    / \\   | \\ | |");
@@ -19,7 +40,7 @@ public class Main {
         System.out.println("===================================================================================================");
         System.out.print("\n");
 
-        System.out.println("||============================SELAMAT DATANG DI GAUSS-JORDAN======================================||");
+        System.out.println("||============================ SELAMAT DATANG DI GAUSS-JORDAN ======================================||");
         System.out.println(">> Pilih menu  :");
         System.out.println("1. Matriks biasa");
         System.out.println("2. Matriks Hilbert");
@@ -37,7 +58,7 @@ public class Main {
                 while (!EndCase) {
 
                     System.out.print("\n");
-                    System.out.println("||====================================AUGMENTED MATRIX============================================||");
+                    System.out.println("||==================================== AUGMENTED MATRIX ============================================||");
                     System.out.println(">> Pilih menu  :");
                     System.out.println("1. Input matriks dari keyboard");
                     System.out.println("2. Input matriks dari file eksternal");
@@ -84,7 +105,7 @@ public class Main {
                 while (!EndCase) {
 
                     System.out.print("\n");
-                    System.out.println("||======================================HILBERT MATRIX============================================||");
+                    System.out.println("||====================================== HILBERT MATRIX ============================================||");
                     System.out.println(">> Pilih menu  :");
                     System.out.println("1. Input matriks hilbert dari keyboard");
                     System.out.println("2. Input matriks hilbert dari file eksternal");
@@ -132,7 +153,7 @@ public class Main {
                 while (!EndCase) {
 
                     System.out.print("\n");
-                    System.out.println("||====================================INTERPOLATION============================================||");
+                    System.out.println("||==================================== INTERPOLATION ============================================||");
                     System.out.println(">> Pilih menu  :");
                     System.out.println("1. Input titik dari keyboard");
                     System.out.println("2. Input titik dari file eksternal");
@@ -152,32 +173,34 @@ public class Main {
                             break;
 
                         case "3" :
-                            System.out.print("\n");
                             if (M3.getRowSize() == 0) {
-                              System.out.println("\n||Anda belum input||\n");
-                            }
-                            else {
-                              M3.writeInterpolationAsFunctionApproximation();
-                              System.out.println("Apakah anda ingin menginput ke file eksternal?(Y,T)");
-                              System.out.print(">> ");
-                              String Input = scan.nextLine();
-                              if (Input == "Y") {
-                                M3.writeInterpolationAsFunctionApproximationToFile();
-                              }
+                                System.out.println();
+                                System.out.println("Titik yang diketahui belum diinput.");
+                            } else {
+                                System.out.println();
+                                System.out.print("Apakah anda ingin menginput ke file eksternal? (Y, T): ");
+                                String Input = scan.nextLine();
+                                if ("Yy".contains(Input)) {
+                                    M3.writeInterpolationAsFunctionApproximationToFile();
+                                } else {
+                                    M3.writeInterpolationAsFunctionApproximation();
+                                }
                             }
                             break;
 
                         case "4" :
                             if (M3.getRowSize() == 0) {
-                              System.out.println("\n||Anda belum input||\n");
-                            }
-                            else {
-                              M3.writeInterpolationSolution();
-                              System.out.println("Apakah anda ingin menginput ke file eksternal?(Y,T)");
-                              String Input = scan.nextLine();
-                              if (Input == "Y") {
-                                M3.writeInterpolationSolutionToFile();
-                              }
+                                System.out.println();
+                                System.out.println("Titik yang diketahui belum diinput.");
+                            } else {
+                                System.out.println();
+                                System.out.print("Apakah anda ingin menginput ke file eksternal? (Y, T): ");
+                                String Input = scan.nextLine();
+                                if ("Yy".contains(Input)) {
+                                    M3.writeInterpolationSolutionToFile();
+                                } else {
+                                    M3.writeInterpolationSolution();
+                                }
                             }
                             break;
 
