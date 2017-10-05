@@ -25,7 +25,7 @@ public class Main {
         System.out.println("2. Matriks Hilbert");
         System.out.println("3. Interpolasi");
         System.out.println("4. Exit");
-        System.out.print(">>");
+        System.out.print(">> ");
 
 
         String OptionMenu = scan.nextLine();
@@ -41,10 +41,9 @@ public class Main {
                     System.out.println(">> Pilih menu  :");
                     System.out.println("1. Input matriks dari keyboard");
                     System.out.println("2. Input matriks dari file eksternal");
-                    System.out.println("3. Tampilkan solusi matriks ke layar");
-                    System.out.println("4. Tampilkan solusi matriks ke file eksternal");
-                    System.out.println("5. Back");
-                    System.out.print(">>");
+                    System.out.println("3. Tampilkan solusi matriks");
+                    System.out.println("4. Back");
+                    System.out.print(">> ");
 
                     String OptionCase = scan.nextLine();
                     switch (OptionCase) {
@@ -52,20 +51,22 @@ public class Main {
                             M1.read();
                             break;
 
-          /*              case "2" :
-                            M1.writeGaussJordan();
+                        case "2" :
+                            M1.readFromFile();
                             break;
-          */
+
                         case "3" :
-                            M1.writeGaussJordan();
+                            System.out.print("\n");
                             M1.writeGaussJordanSolution();
+                            System.out.println("Apakah anda ingin menginput ke file eksternal?(Y,T)");
+                            System.out.print(">> ");
+                            String Input = scan.nextLine();
+                            if (Input == "Y") {
+                              M1.writeGaussJordanSolutionToFile();
+                            }
                             break;
 
                         case "4" :
-                            M1.writeGaussJordanSolutionToFile();
-                            break;
-
-                        case "5" :
                             EndCase = true;
                             break;
 
@@ -83,14 +84,13 @@ public class Main {
                 while (!EndCase) {
 
                     System.out.print("\n");
-                    System.out.println("||====================================AUGMENTED MATRIX============================================||");
+                    System.out.println("||======================================HILBERT MATRIX============================================||");
                     System.out.println(">> Pilih menu  :");
                     System.out.println("1. Input matriks hilbert dari keyboard");
                     System.out.println("2. Input matriks hilbert dari file eksternal");
-                    System.out.println("3. Tampilkan solusi matriks hilbert ke layar");
-                    System.out.println("4. Tampilkan solusi matriks hilbert ke file eksternal");
-                    System.out.println("5. Back");
-                    System.out.print(">>");
+                    System.out.println("3. Tampilkan solusi matriks hilbert");
+                    System.out.println("4. Back");
+                    System.out.print(">> ");
 
                     String OptionCase = scan.nextLine();
                     switch (OptionCase) {
@@ -99,18 +99,21 @@ public class Main {
                             break;
 
                         case "2" :
-                            System.out.println("\nbelom ada buset\n");
+                            M2.readForHilbertFromFile();
                             break;
 
                         case "3" :
+                            System.out.print("\n");
                             M2.writeGaussJordanSolution();
+                            System.out.println("Apakah anda ingin menginput ke file eksternal?(Y,T)");
+                            System.out.print(">> ");
+                            String Input = scan.nextLine();
+                            if (Input == "Y") {
+                              M2.writeGaussJordanSolutionToFile();
+                            }
                             break;
 
                         case "4" :
-                            M2.writeGaussJordanSolutionToFile();
-                            break;
-
-                        case "5" :
                             EndCase = true;
                             break;
 
@@ -133,10 +136,10 @@ public class Main {
                     System.out.println(">> Pilih menu  :");
                     System.out.println("1. Input titik dari keyboard");
                     System.out.println("2. Input titik dari file eksternal");
-                    System.out.println("3. Tampilkan solusi interpolasi ke layar");
-                    System.out.println("4. Tampilkan solusi interpolasi ke file eksternal");
+                    System.out.println("3. Aproksimasi nilai fungsi");
+                    System.out.println("4. Tampilkan solusi interpolasi");
                     System.out.println("5. Back");
-                    System.out.print(">>");
+                    System.out.print(">> ");
 
                     String OptionCase = scan.nextLine();
                     switch (OptionCase) {
@@ -144,16 +147,38 @@ public class Main {
                             M3.readForInterpolation();
                             break;
 
-              /*          case "2" :
-                            M3.writeInterpolationSolution();
+                        case "2" :
+                            M3.readForInterpolationFromFile();
                             break;
-              */
+
                         case "3" :
-                            M3.writeInterpolationSolution();
+                            System.out.print("\n");
+                            if (M3.getRowSize() == 0) {
+                              System.out.println("\n||Anda belum input||\n");
+                            }
+                            else {
+                              M3.writeInterpolationAsFunctionApproximation();
+                              System.out.println("Apakah anda ingin menginput ke file eksternal?(Y,T)");
+                              System.out.print(">> ");
+                              String Input = scan.nextLine();
+                              if (Input == "Y") {
+                                M3.writeInterpolationAsFunctionApproximationToFile();
+                              }
+                            }
                             break;
 
                         case "4" :
-                            M3.writeInterpolationSolutionToFile();
+                            if (M3.getRowSize() == 0) {
+                              System.out.println("\n||Anda belum input||\n");
+                            }
+                            else {
+                              M3.writeInterpolationSolution();
+                              System.out.println("Apakah anda ingin menginput ke file eksternal?(Y,T)");
+                              String Input = scan.nextLine();
+                              if (Input == "Y") {
+                                M3.writeInterpolationSolutionToFile();
+                              }
+                            }
                             break;
 
                         case "5" :
