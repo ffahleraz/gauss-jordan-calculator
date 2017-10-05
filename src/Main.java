@@ -43,9 +43,9 @@ public class Main {
         System.out.println("        \\::/  /     \\:\\  \\ /:/  / \\/_|::\\/:/  / \\:\\  \\ /:/  / \\/__\\:\\/:/  / \\/__|:|/:/  /");
         System.out.println("         \\/__/       \\:\\  /:/  /     |:|::/  /   \\:\\  /:/  /       \\::/  /      |:/:/  /");
         System.out.println("                      \\:\\/:/  /      |:|\\/__/     \\:\\/:/  /        /:/  /       |::/  /");
-        System.out.println("                       \\::/  /       |:|  |        \\::/__/        /:/  /        /:/  /");
-        System.out.println("                        \\/__/         \\|__|         ~~            \\/__/         \\/__/");
-        System.out.println();
+        System.out.println("    By: Musang         \\::/  /       |:|  |        \\::/__/        /:/  /        /:/  /");
+        System.out.println("        Jon Fahleraz    \\/__/         \\|__|         ~~            \\/__/         \\/__/");
+        System.out.println("        Hunnie");       
         System.out.println();
     }
 
