@@ -68,7 +68,8 @@ public class Main {
         System.out.println("1. Matriks biasa");
         System.out.println("2. Matriks Hilbert");
         System.out.println("3. Interpolasi");
-        System.out.println("4. Exit");
+        System.out.println("4. Fungsi e");
+        System.out.println("5. Exit");
         System.out.print(">> ");
 
 
@@ -255,6 +256,72 @@ public class Main {
                 break;
 
             case "4" :
+
+                Matrix M4 = new Matrix();
+                EndCase = false;
+                while (!EndCase) {
+
+                    System.out.println();
+                    System.out.println("||======================================= FUNGSI E ===========================================||");
+                    System.out.println();
+                    System.out.println(">> Pilih menu  :");
+                    System.out.println("1. Input titik dari keyboard");
+                    System.out.println("2. Aproksimasi nilai fungsi");
+                    System.out.println("3. Tampilkan solusi interpolasi");
+                    System.out.println("4. Back");
+                    System.out.print(">> ");
+
+                    String OptionCase = scan.nextLine();
+                    switch (OptionCase) {
+                        case "1" :
+                            M4.readForInterpolationE();
+                            break;
+
+                        case "2" :
+                            if (M4.getRowSize() == 0) {
+                                System.out.println();
+                                System.out.println("Tidak ada titik yang diketahui.");
+                            } else {
+                                System.out.println();
+                                System.out.print("Apakah anda ingin mengoutput hasilnya ke file eksternal? (Y, T): ");
+                                String Input = scan.nextLine();
+                                if ("Yy".contains(Input)) {
+                                    M4.writeInterpolationAsFunctionApproximationToFile();
+                                } else {
+                                    M4.writeInterpolationAsFunctionApproximation();
+                                }
+                            }
+                            break;
+
+                        case "3" :
+                            if (M4.getRowSize() == 0) {
+                                System.out.println();
+                                System.out.println("Tidak ada titik yang diketahui.");
+                            } else {
+                                System.out.println();
+                                System.out.print("Apakah anda ingin mengoutput hasilnya ke file eksternal? (Y, T): ");
+                                String Input = scan.nextLine();
+                                if ("Yy".contains(Input)) {
+                                    M4.writeInterpolationSolutionToFile();
+                                } else {
+                                    M4.writeInterpolationSolution();
+                                }
+                            }
+                            break;
+
+                        case "4" :
+                            EndCase = true;
+                            break;
+
+                        default :
+                            System.out.println();
+                            System.out.println("Input salah, masukan input ulang.");
+                            break;
+                    }
+                }
+                break;
+
+            case "5" :
                 EndMenu = true;
                 break;
 

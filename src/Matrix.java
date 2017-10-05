@@ -527,43 +527,6 @@ public class Matrix {
 
             for (int i = 0; i < this.rowSize; i ++) {
 
-                /*/
-                buffer = reader.nextLine();
-
-                Pattern p = Pattern.compile("\\d+\\.\\d+");
-                Matcher m = p.matcher(buffer);
-
-                x = 0;
-                y = 0;
-
-                int count = 0;
-                try {
-
-                    while (m.find()) {
-                        x = Double.parseDouble(m.group());
-                        count ++;
-                        break;
-                    }
-                    while (m.find()) {
-                        y = Double.parseDouble(m.group());
-                        count ++;
-                        break;
-                    }
-
-                    if (count != 2) {
-                        System.out.println();
-                        System.out.println("Format file eksternal salah.");
-                        return;
-                    }
-
-                } catch(Exception e) {
-
-                    System.out.println();
-                    System.out.println("Format file eksternal salah.");
-                    return;
-
-                }
-                /*/
                 x = 0.0;
                 y = 0.0;
                 try {
@@ -594,6 +557,51 @@ public class Matrix {
             System.out.println("Tidak dapat membaca dari file eksternal.");
         }
 
+    }
+
+    public void readForInterpolationE() {
+
+        Scanner scan = new Scanner(System.in);
+        double x, y, a, b;
+
+        this.clear();
+
+        System.out.println();
+        System.out.print("Masukkan awal selang: ");
+        a = scan.nextDouble();
+        System.out.print("Masukkan akhir selang: ");
+        b = scan.nextDouble();
+
+        // Read number of points
+        while (this.rowSize < 1) {
+
+            System.out.print("Masukkan derajat polinom hampiran: ");
+            this.rowSize = scan.nextInt() + 1;
+
+            if (this.rowSize < 1) {
+                System.out.println();
+                System.out.println("Derajat polinom harus lebih dari 0.");
+            }
+
+        }
+
+        // Assign row size
+        this.colSize = this.rowSize + 1;
+
+        double interval = (b - a) / (double) (this.rowSize);
+        // Read points
+        for (int i = 0; i < this.rowSize; i++) {
+
+            x = a + (interval * ((double) i));
+            y = (Math.exp(-x))/ (1 + Math.pow(x,2) + Math.sqrt(x));
+
+            for (int j = 0; j < this.colSize - 1; j ++) {
+                this.mat[i][this.colSize - 2 - j] = power(x, j);
+            }
+
+            this.mat[i][this.colSize - 1] = y;
+
+        }
     }
 
     /*
