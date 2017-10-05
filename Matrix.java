@@ -325,15 +325,17 @@ public class Matrix {
         Scanner scan = new Scanner(System.in);
 
         //Read Row
-        System.out.println("Masukan jumlah baris : ");
+        System.out.println();
+        System.out.print("Masukan jumlah baris: ");
         this.rowSize = scan.nextInt();
 
         //Read Column
-        System.out.println("Masukan jumlah kolom : ");
+        System.out.print("Masukan jumlah kolom: ");
         this.colSize = scan.nextInt();
 
         //Read element
-        System.out.println("Input matriks : ");
+        System.out.println();
+        System.out.println("Input matriks: ");
         for (int i = 0; i < this.rowSize; i++) {
             for (int j = 0; j < this.colSize; j++) {
                 this.mat[i][j] = scan.nextDouble();
@@ -346,30 +348,46 @@ public class Matrix {
         try {
 
             Scanner scan = new Scanner(System.in);
-            System.out.println("Masukkan nama file eksternal: ");
-            System.out.print(">>");
+            System.out.println();
+            System.out.print("Masukkan nama file eksternal: ");
             String fileName = scan.nextLine();
             File file = new File(fileName);
             Scanner reader = new Scanner(file);
 
-            if (reader.nextLine().equals("BARIS")) {
-              this.rowSize = reader.nextInt();
+            if (reader.next().equals("BARIS")) {
+                this.rowSize = reader.nextInt();
+            } else {
+                System.out.println();
+                System.out.println("Format file eksternal salah.");
+                return;
             }
-            if (reader.nextLine().equals("KOLOM")) {
-              this.colSize = reader.nextInt();
-
+            if (reader.next().equals("KOLOM")) {
+                this.colSize = reader.nextInt();
+            } else {
+                  System.out.println();
+                  System.out.println("Format file eksternal salah.");
+                  return;
             }
 
-            for (int row = 0; row < this.rowSize; row++) {
-                   for (int col = 0; col < this.colSize; col++) {
-                       this.mat[row][col] = reader.nextDouble() ;
-                  }
+            try {
+                for (int row = 0; row < this.rowSize; row++) {
+                       for (int col = 0; col < this.colSize; col++) {
+                           this.mat[row][col] = reader.nextDouble() ;
+                      }
+                }
+            } catch (Exception e) {
+                System.out.println();
+                System.out.println("Format file eksternal salah.");
+                this.clear();
+                return;
             }
 
             reader.close();
+            System.out.println();
             System.out.println("Berhasil membaca dari file '" + fileName + "'.");
 
-        } catch (IOException i) {
+        } catch (Exception i) {
+            System.out.println();
             System.out.println("Tidak dapat membaca dari file eksternal.");
         }
 
@@ -379,7 +397,8 @@ public class Matrix {
 
         Scanner scan = new Scanner(System.in);
 
-        System.out.println("Masukan dimensi matriks Hilbert : ");
+        System.out.println();
+        System.out.print("Masukan dimensi matriks Hilbert : ");
         this.rowSize = scan.nextInt();
         this.colSize = this.rowSize + 1;
 
@@ -400,15 +419,19 @@ public class Matrix {
         try {
 
             Scanner scan = new Scanner(System.in);
-            System.out.println("Masukkan nama file eksternal: ");
-            System.out.print(">>");
+            System.out.println();
+            System.out.print("Masukkan nama file eksternal: ");
             String fileName = scan.nextLine();
             File file = new File(fileName);
             Scanner reader = new Scanner(file);
 
-            if (reader.nextLine().equals("DIMENSI")) {
-              this.rowSize = reader.nextInt();
-              this.colSize = this.rowSize + 1;
+            if (reader.next().equals("DIMENSI")) {
+                this.rowSize = reader.nextInt();
+                this.colSize = this.rowSize + 1;
+            } else {
+                System.out.println();
+                System.out.println("Format file eksternal salah.");
+                return;
             }
 
             for (int i = 0; i < this.rowSize; i ++) {
@@ -422,9 +445,11 @@ public class Matrix {
             }
 
             reader.close();
+            System.out.println();
             System.out.println("Berhasil membaca dari file '" + fileName + "'.");
 
-        } catch (IOException i) {
+        } catch (Exception i) {
+            System.out.println();
             System.out.println("Tidak dapat membaca dari file eksternal.");
         }
 
@@ -490,13 +515,18 @@ public class Matrix {
 
             buffer = reader.next();
             if (buffer.equals("JUMLAH")) {
-              this.rowSize = reader.nextInt();
-              this.colSize = this.rowSize + 1;
+                  this.rowSize = reader.nextInt();
+                  this.colSize = this.rowSize + 1;
+            } else {
+                System.out.println();
+                System.out.println("Format file eksternal salah.");
+                return;
             }
             buffer = reader.nextLine();
 
             for (int i = 0; i < this.rowSize; i ++) {
 
+                /*/
                 buffer = reader.nextLine();
 
                 Pattern p = Pattern.compile("\\d+\\.\\d+");
@@ -522,15 +552,28 @@ public class Matrix {
                     if (count != 2) {
                         System.out.println();
                         System.out.println("Format file eksternal salah.");
-                        break;
+                        return;
                     }
 
                 } catch(Exception e) {
 
                     System.out.println();
                     System.out.println("Format file eksternal salah.");
-                    break;
+                    return;
 
+                }
+                /*/
+                x = 0.0;
+                y = 0.0;
+                try {
+
+                    x = reader.nextDouble();
+                    y = reader.nextDouble();
+
+                } catch (Exception ex) {
+                    System.out.println();
+                    System.out.println("Format file eksternal salah.");
+                    return;
                 }
 
                 for (int j = 0; j < this.colSize - 1; j ++) {
@@ -545,7 +588,7 @@ public class Matrix {
             System.out.println();
             System.out.println("Berhasil membaca dari file '" + fileName + "'.");
 
-        } catch (IOException i) {
+        } catch (Exception e) {
             System.out.println();
             System.out.println("Tidak dapat membaca dari file eksternal.");
         }
@@ -561,9 +604,11 @@ public class Matrix {
 
         if ((this.rowSize == 0) && (this.colSize == 0)) {
 
-            System.out.println("\n||Matriks kosong||");
+            System.out.println();
+            System.out.println("Matriks kosong.");
 
         }
+        System.out.println();
         for (int i = 0; i < this.rowSize; i++) {
             for (int j = 0; j < this.colSize; j++) {
                 System.out.format("%.3f",this.mat[i][j]);
@@ -582,13 +627,13 @@ public class Matrix {
         try {
 
             Scanner scan = new Scanner(System.in);
-            System.out.println("Masukkan nama file eksternal: ");
-            System.out.print(">>");
+            System.out.println();
+            System.out.print("Masukkan nama file eksternal: ");
             String fileName = scan.nextLine();
             PrintWriter writer = new PrintWriter(fileName, "UTF-8");
 
             if ((this.rowSize == 0) && (this.colSize == 0)) {
-                writer.println("\n||Matriks kosong||");
+                writer.println("Matriks kosong.");
             }
             for (int i = 0; i < this.rowSize; i++) {
                 for (int j = 0; j < this.colSize; j++) {
@@ -602,10 +647,12 @@ public class Matrix {
             }
 
             writer.close();
+            System.out.println();
             System.out.println("Berhasil menulis ke file '" + fileName + "'.");
 
         } catch (IOException e) {
-              System.out.println("Tidak dapat menulis ke file eksternal.");
+            System.out.println();
+            System.out.println("Tidak dapat menulis ke file eksternal.");
         }
 
     }
@@ -745,10 +792,12 @@ public class Matrix {
 
         if (reducedMat.isNoSolution()) {
 
+            System.out.println();
             System.out.println("Sistem persamaan tidak memiliki solusi.");
 
         } else if (reducedMat.isInfiniteSolution()) {
 
+            System.out.println();
             System.out.println("Sistem persamaan memiliki banyak solusi. Bentuk paramtetrik nya:");
 
             String paramChars = "pqrstuvwxyzabcdefghijklmno";
@@ -805,6 +854,7 @@ public class Matrix {
 
         } else {
 
+            System.out.println();
             System.out.println("Sistem persamaan memiliki solusi unik:");
 
             for (int i = 0; i < reducedMat.rowSize; i ++) {
@@ -820,8 +870,8 @@ public class Matrix {
         try {
 
             Scanner scan = new Scanner(System.in);
-            System.out.println("Masukkan nama file eksternal: ");
-            System.out.print(">>");
+            System.out.println();
+            System.out.print("Masukkan nama file eksternal: ");
             String fileName = scan.nextLine();
             PrintWriter writer = new PrintWriter(fileName, "UTF-8");
 
@@ -900,10 +950,12 @@ public class Matrix {
             }
 
             writer.close();
+            System.out.println();
             System.out.println("Berhasil menulis ke file '" + fileName + "'.");
 
         } catch (IOException e) {
-              System.out.println("Tidak dapat menulis ke file eksternal.");
+            System.out.println();
+            System.out.println("Tidak dapat menulis ke file eksternal.");
         }
 
     }
